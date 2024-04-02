@@ -55,7 +55,7 @@ function Login() {
                     className="bg-blue px-8 text-sm font-semibold text-white hover:bg-blue-700  sm:w-auto"
                   />
                   <p>
-                    Don't have an account yet?{" "}
+                    Don{"'"}t have an account yet?{" "}
                     <Link to="/register" className="underline">
                       Register
                     </Link>

@@ -1,11 +1,13 @@
 import clsx from "clsx";
-import React, { useState } from "react";
+import { useState } from "react";
+import { HiOutlineUserGroup } from "react-icons/hi";
 import {
   MdAttachFile,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
   MdKeyboardDoubleArrowUp,
 } from "react-icons/md";
+
 import { useNavigate } from "react-router-dom";
 import { BGS, formatDate } from "../../utils";
 import TaskDialog from "./TaskDialog";
@@ -50,7 +52,15 @@ const TaskCard = ({ task }) => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
             <div className="flex gap-1 items-center text-sm text-gray-600 ">
-              <MdAttachFile />
+              <div className=" lg:tooltip" data-tip="Assets">
+                <MdAttachFile />
+              </div>
+              <span>{task?.assets?.length}</span>
+            </div>
+            <div className="flex gap-1 items-center text-sm text-gray-600 ">
+              <div className="lg:tooltip" data-tip="Team Member">
+                <HiOutlineUserGroup />
+              </div>
               <span>{task?.assets?.length}</span>
             </div>
           </div>

@@ -7,9 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AddTask from "./AddTask";
 
 const TaskDialog = ({ task }) => {
-  const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
 
   const navigate = useNavigate();
 
