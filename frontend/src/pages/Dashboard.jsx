@@ -3,7 +3,7 @@ import { FaNewspaper } from "react-icons/fa";
 import { FaArrowsToDot } from "react-icons/fa6";
 import { LuClipboardEdit } from "react-icons/lu";
 import { MdAdminPanelSettings } from "react-icons/md";
-import { summary } from "../assets/data";
+import { useGetSummery } from "../api";
 const Card = ({ label, count, bg, icon }) => {
   return (
     <div className="w-full h-32 bg-primary-color p-5 shadow-md rounded-md flex items-center justify-between">
@@ -24,33 +24,37 @@ const Card = ({ label, count, bg, icon }) => {
   );
 };
 function InternalPage() {
-  const totals = summary.tasks;
+  const { data: summary, error, loading } = useGetSummery();
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
+  console.log(summary);
   const stats = [
     {
       _id: "1",
       label: "TOTAL TASK",
-      total: summary?.totalTasks || 0,
+      total: summary?.["totalTasks"] || 0,
       icon: <FaNewspaper />,
       bg: "bg-[#1d4ed8]",
     },
     {
       _id: "2",
       label: "COMPLTED TASK",
-      total: totals["completed"] || 0,
+      total: summary?.["Completed"] || 0,
       icon: <MdAdminPanelSettings />,
       bg: "bg-[#0f766e]",
     },
     {
       _id: "3",
       label: "TASK IN PROGRESS ",
-      total: totals["in progress"] || 0,
+      total: summary?.["In Progress"] || 0,
       icon: <LuClipboardEdit />,
       bg: "bg-[#f59e0b]",
     },
     {
       _id: "4",
       label: "TODOS",
-      total: totals["todo"],
+      total: summary?.["To-Do"],
       icon: <FaArrowsToDot />,
       bg: "bg-[#be185d]" || 0,
     },

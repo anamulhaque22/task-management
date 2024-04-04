@@ -46,3 +46,5 @@ export const BGS = [
   "bg-red-600",
   "bg-green-600",
 ];
+
+export const ROOT_API_URL = "http://localhost:3000"; // to access the public resoruses

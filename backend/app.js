@@ -23,18 +23,17 @@ app.use(mongoSanitize())
 // parse json request body
 app.use(express.json())
 // parse urlencoded request body
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 
 // request rate limit
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 })
 app.use(limiter)
 
 // enable cors
-app.use(cors())
+app.use(cors({ credentials: true, origin: true }))
 app.options('*', cors())
 
 // Mongodb database connection
-
 mongoose
     // eslint-disable-next-line no-undef
     .connect(process.env.MONGODB_URL)
@@ -42,6 +41,12 @@ mongoose
     .catch((err) => {
         console.log(err)
     })
+
+// eslint-disable-next-line no-undef
+
+// eslint-disable-next-line no-undef
+app.use(express.static(__dirname + '/public'))
+app.use('/uploads', express.static('uploads'))
 
 // Routing
 app.use('/api/v1', router)

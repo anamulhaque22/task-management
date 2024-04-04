@@ -5,7 +5,7 @@ import { MdCheck } from "react-icons/md";
 
 const SelectBox = ({ lists, selected, setSelected, label }) => {
   return (
-    <div className="w-full">
+    <div className="w-full z-50" onClick={(e) => e.stopPropagation()}>
       {label && <p className="text-slate-900 dark:text-gray-500">{label}</p>}
 
       <Listbox value={selected} onChange={setSelected}>

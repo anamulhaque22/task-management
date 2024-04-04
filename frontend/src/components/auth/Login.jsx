@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import axios from "../../utils/axios";
+import { errorToaster } from "../../utils/toastMessage";
 import InputText from "../Input/InputText";
 import Button from "../common/Button";
 
@@ -9,8 +11,18 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const submitHandler = (data) => {
-    console.log(data);
+  const submitHandler = async (data) => {
+    try {
+      const response = await axios.post("/auth/login", data);
+      if (response.data.tokens) {
+        localStorage.setItem("token", response.data.tokens.accessToken);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        window.location.href = "/app/dashboard";
+      }
+    } catch (error) {
+      console.error(error);
+      errorToaster(error.message);
+    }
   };
   return (
     <div className="min-h-screen bg-base-200 flex items-center">
@@ -50,7 +62,7 @@ function Login() {
 
                 <div className=" py-6 sm:flex sm:flex-row-reverse items-center gap-4">
                   <Button
-                    label="Submit"
+                    label="Login"
                     type="submit"
                     className="bg-blue px-8 text-sm font-semibold text-white hover:bg-blue-700  sm:w-auto"
                   />

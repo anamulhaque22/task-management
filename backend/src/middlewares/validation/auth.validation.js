@@ -17,7 +17,7 @@ const loginValidator = [
 ]
 
 const registerValidator = [
-    check('name').isEmpty().withMessage('Name is required').trim(),
+    check('name').notEmpty().withMessage('Name is required').trim().bail(),
     check('email')
         .toLowerCase()
         .isEmail()
@@ -34,10 +34,9 @@ const registerValidator = [
             } catch (error) {
                 throw createHttpError(error.message)
             }
-        }),
-    check('mobile')
-        .isMobilePhone()
-        .withMessage('Mobile number must be valid Bangladeshi number!'),
+        })
+        .bail(),
+
     check('password')
         .isStrongPassword({
             minLength: 6,
@@ -49,6 +48,7 @@ const registerValidator = [
         .withMessage(
             'Password must be 6 characters long & should contain at least 1 lowercase, 1 uppercase, 1 number & 1 symbol'
         )
+        .bail()
 ]
 
 const refreshTokenValidator = [

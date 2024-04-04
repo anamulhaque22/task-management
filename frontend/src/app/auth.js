@@ -1,35 +1,27 @@
 import axios from "../utils/axios";
 
 const checkAuth = () => {
-  /*  Getting token value stored in localstorage, if token is not present we will open login page 
-    for all internal dashboard routes  */
   const TOKEN = localStorage.getItem("token");
-  const PUBLIC_ROUTES = [
-    "login",
-    "forgot-password",
-    "register",
-    "documentation",
-  ];
+  const PUBLIC_ROUTES = ["login", "register"];
 
   const isPublicPage = PUBLIC_ROUTES.some((r) =>
     window.location.href.includes(r)
   );
   console.log(isPublicPage);
-  if (true) {
-    //!TOKEN && !isPublicPage
-    console.log("token not found");
-    // window.location.href = '/login'
+  if (!TOKEN && !isPublicPage) {
+    window.location.href = "/login";
     return;
   } else {
-    axios.defaults.headers.common["token"] = TOKEN;
-
     axios.interceptors.request.use(
-      function (config) {
-        // UPDATE: Add this code to show global loading indicator
+      (config) => {
+        if (TOKEN) {
+          config.headers.Authorization = `Bearer ${TOKEN}`;
+        }
         document.body.classList.add("loading-indicator");
         return config;
       },
-      function (error) {
+      (error) => {
+        console.error("Error while setting headers", error);
         return Promise.reject(error);
       }
     );
@@ -41,7 +33,7 @@ const checkAuth = () => {
         return response;
       },
       function (error) {
-        if (error.response.status === 401) {
+        if (error.response.status === 401 || error.response.status === 403) {
           localStorage.removeItem("token");
           window.location.href = "/login";
         }

@@ -25,7 +25,7 @@ const generateAuthTokens = async (user) => {
         'minutes'
     )
     const accessToken = generateToken(
-        user.id,
+        { id: user.id, email: user.email },
         accessTokenExpires,
         tokenTypes.ACCESS
     )
@@ -36,7 +36,7 @@ const generateAuthTokens = async (user) => {
         'days'
     )
     const refreshToken = generateToken(
-        user.id,
+        { id: user.id, email: user.email },
         refreshTokenExpires,
         tokenTypes.REFRESH
     )

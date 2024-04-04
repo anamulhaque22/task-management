@@ -6,13 +6,14 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import AddTask from "./AddTask";
 
-const TaskDialog = ({ task }) => {
+const TaskDialog = ({ task, onDeleteTask, setData }) => {
   const [openEdit, setOpenEdit] = useState(false);
 
   const navigate = useNavigate();
 
-  const deleteHandler = (e) => {
+  const deleteHandler = async (e) => {
     e.stopPropagation();
+    onDeleteTask(task._id);
   };
 
   const items = [
@@ -70,7 +71,7 @@ const TaskDialog = ({ task }) => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    onClick={() => deleteHandler()}
+                    onClick={(e) => deleteHandler(e)}
                     className={`${
                       active ? "bg-blue-500 text-white" : "text-red-900"
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -93,6 +94,7 @@ const TaskDialog = ({ task }) => {
         setOpen={setOpenEdit}
         task={task}
         key={new Date().getTime()}
+        setData={setData}
       />
     </>
   );

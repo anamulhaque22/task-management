@@ -2,15 +2,17 @@ const express = require('express')
 const authController = require('../controllers/auth.controller')
 const {
     loginValidator,
-    refreshTokenValidator
+    refreshTokenValidator,
+    registerValidator
 } = require('../middlewares/validation/auth.validation')
-const handleValidationErrors = require('../middlewares/handleValidationErrors')
+const handleValidationErrors = require('../middlewares/validation/handleValidationErrors')
 
 const router = express.Router()
 
 router.post(
     '/register',
-
+    registerValidator,
+    handleValidationErrors,
     authController.register
 )
 router.post(

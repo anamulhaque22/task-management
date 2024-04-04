@@ -3,49 +3,87 @@ import { BiImages } from "react-icons/bi";
 
 // import SelectList from "../SelectList";
 // import Textbox from "../Textbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "../../utils/axios";
+import { errorToaster, successToaster } from "../../utils/toastMessage";
 import { default as InputText } from "../Input/InputText";
 import SelectBox from "../Input/SelectBox";
 import Button from "../common/Button";
 import ModalWrapper from "../common/ModalWrapper";
 // import UserList from "./UserList";
 
-const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
-const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
+const LISTS = ["To-Do", "In Progress", "Pending", "Completed", "Canceled"];
+const PRIORIRY = ["Low", "Normal", "Medium", "High"];
 
 // const uploadedFileURLs = [];
 
-const AddTask = ({ open, setOpen }) => {
-  const task = "";
+const AddTask = ({ task, open, setOpen, setData }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const {
     register,
     handleSubmit,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm();
-
-  // const [team, setTeam] = useState(task?.team || []);
-  const [stage, setStage] = useState(task?.stage?.toUpperCase() || LISTS[0]);
-  const [priority, setPriority] = useState(
-    task?.priority?.toUpperCase() || PRIORIRY[2]
-  );
-  const [assets, setAssets] = useState([]);
+  const [stage, setStage] = useState(task?.stage || LISTS[0]);
+  const [priority, setPriority] = useState(task?.priority || PRIORIRY[2]);
+  const [assets, setAssets] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  const submitHandler = (data) => {
+  const submitHandler = async (data) => {
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("date", data.date);
+    formData.append("dueDate", data.date);
     formData.append("stage", stage);
     formData.append("priority", priority);
-    formData.append("assets", assets);
-    for (const pair of formData.entries()) {
-      console.log(pair);
+    if (assets) formData.append("assets", assets);
+    formData.append("createdBy", user?.id);
+
+    try {
+      setUploading(true);
+      let res;
+      if (task) {
+        res = await axios.put(`/tasks/${task._id}`, formData);
+      } else {
+        res = await axios.post("/tasks", formData);
+      }
+
+      if (res.status === 201 || res.status === 200) {
+        reset();
+        setUploading(false);
+        setOpen(false);
+        setData((prev) => ({ tasks: [...prev.tasks, res.data.task] }));
+        successToaster("Task added Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+      if (error?.response?.data?.message) {
+        errorToaster(error?.response?.data?.message);
+      } else {
+        errorToaster("Something went wrong");
+      }
     }
   };
 
+  // Populate form fields with task data when editing
+  useEffect(() => {
+    if (task) {
+      const initialDate = new Date(task.dueDate);
+      const formattedDate = initialDate.toISOString().slice(0, 10);
+
+      setValue("title", task.title);
+      setValue("date", formattedDate);
+      setStage(task.stage);
+      setPriority(task.priority);
+    }
+  }, [task, setValue]);
+
   const handleSelect = (e) => {
-    setAssets(e.target.files);
+    setAssets(e.target.files[0]);
   };
 
   return (
@@ -69,7 +107,6 @@ const AddTask = ({ open, setOpen }) => {
               register={register("title", { required: "Title is required" })}
               error={errors.title ? errors.title.message : ""}
             />
-
             <div className="flex gap-4">
               <SelectBox
                 label="Task Stage"
@@ -85,7 +122,6 @@ const AddTask = ({ open, setOpen }) => {
                 setSelected={setPriority}
               />
             </div>
-
             <div className="flex gap-4">
               <div className="w-full">
                 <InputText

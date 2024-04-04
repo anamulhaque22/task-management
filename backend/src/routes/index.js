@@ -1,6 +1,6 @@
 const express = require('express')
 const authRoute = require('./auth.route')
-// const userRoute = require('./user.route')
+const tasksRoute = require('./tasks.route')
 
 const router = express.Router()
 
@@ -8,11 +8,11 @@ const defaultRoutes = [
     {
         path: '/auth',
         route: authRoute
+    },
+    {
+        path: '/tasks',
+        route: tasksRoute
     }
-    // {
-    //     path: '/users',
-    //     route: userRoute
-    // }
 ]
 
 defaultRoutes.forEach((route) => {

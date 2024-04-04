@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../../utils/axios";
+import { errorToaster } from "../../utils/toastMessage";
 import InputText from "../Input/InputText";
 import Button from "../common/Button";
 
@@ -9,27 +11,42 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const submitHandler = (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+  const submitHandler = async (data) => {
+    try {
+      const res = await axios.post("/auth/register", data);
+      if (res.status === 201) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message) {
+        errorToaster(error?.response?.data?.message);
+      } else {
+        errorToaster(error?.message);
+      }
+    }
   };
   return (
     <div className="min-h-screen bg-base-200 flex items-center">
       <div className="card mx-auto w-full max-w-2xl  shadow-xl">
         <div className="grid grid-cols-1  bg-base-100 rounded-xl">
           <div className="py-24 px-10">
-            <h2 className="text-2xl font-semibold mb-2 text-center">Login</h2>
+            <h2 className="text-2xl font-semibold mb-2 text-center">
+              Create Account
+            </h2>
             <form onSubmit={handleSubmit(submitHandler)}>
               <div className="mt-2 flex flex-col gap-6">
                 <InputText
                   placeholder="Full Name"
                   type="text"
-                  name="fullName"
+                  name="name"
                   label="Full Name"
                   customStyle="w-full rounded"
-                  register={register("fullName", {
+                  register={register("name", {
                     required: "Full Name is required!",
                   })}
-                  error={errors.fullName ? errors.fullName.message : ""}
+                  error={errors.name ? errors.name.message : ""}
                 />
 
                 <InputText

@@ -24,14 +24,15 @@ function LeftSidebar() {
           <XMarkIcon className="h-5 inline-block w-5" />
         </button>
 
-        <li className="mb-2 font-semibold text-xl">
-          <Link to={"/app/welcome"}>
-            <img
+        <li className="mb-2 font-semibold">
+          <Link to={"/app/dashboard"} className="flex !gap-0">
+            {/* <img
               className="mask mask-squircle w-10"
               src="/logo192.png"
               alt="DashWind Logo"
-            />
-            DashWind
+            /> */}
+            <span className="text-3xl">Task</span>
+            <span className="text-blue text-xl">Management</span>
           </Link>{" "}
         </li>
         {routes.map((route, k) => {

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import checkAuth from "./app/auth";
 import { HeaderTitleProvider } from "./context/HeaderTitleContext";
 
 // Importing pages
@@ -15,8 +16,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
 // Check for login and initialize axios
-// const token = checkAuth();
-const token = true;
+const token = checkAuth();
 
 function App() {
   return (

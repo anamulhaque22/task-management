@@ -1,50 +1,49 @@
 import clsx from "clsx";
-import { useState } from "react";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import {
-  MdAttachFile,
-  MdKeyboardArrowDown,
-  MdKeyboardArrowUp,
-  MdKeyboardDoubleArrowUp,
-} from "react-icons/md";
+import { MdAttachFile, MdKeyboardDoubleArrowUp } from "react-icons/md";
 
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BGS, formatDate } from "../../utils";
 import TaskDialog from "./TaskDialog";
 
-const ICONS = {
-  high: <MdKeyboardDoubleArrowUp />,
-  medium: <MdKeyboardArrowUp />,
-  low: <MdKeyboardArrowDown />,
-};
-
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, onDeleteTask, setData }) => {
   const navigate = useNavigate();
   //   const { user } = useSelector((state) => state.auth);
   const user = { isAdmin: true };
   const [open, setOpen] = useState(false);
 
+  const { priority, title, createdAt, assets, assignedUsers } = task;
+
   return (
     <>
       <div
         className="w-full h-fit bg-primary-color shadow-xl p-4 rounded-md cursor-pointer"
-        onClick={() => navigate(`/app/task/1`)}
+        onClick={() => navigate(`/app/task/${task._id}`)}
       >
         <div className="w-full flex justify-between">
           <div className="flex flex-1 gap-1 items-center text-sm font-medium">
-            <span className="text-lg">{ICONS[task?.priority]}</span>
-            <span className="uppercase">{task?.priority} Priority</span>
+            <span className="text-lg">
+              <MdKeyboardDoubleArrowUp />
+            </span>
+            <span className="uppercase">{priority} Priority</span>
           </div>
 
-          {user?.isAdmin && <TaskDialog task={task} />}
+          {user?.isAdmin && (
+            <TaskDialog
+              task={task}
+              onDeleteTask={onDeleteTask}
+              setData={setData}
+            />
+          )}
         </div>
 
         <>
           <div className="flex items-center gap-2">
-            <h4 className="line-clamp-1 text-black">{task?.title}</h4>
+            <h4 className="line-clamp-1 text-black">{title}</h4>
           </div>
           <span className="text-sm text-gray-600">
-            {formatDate(new Date(task?.date))}
+            {formatDate(new Date(createdAt))}
           </span>
         </>
 
@@ -55,13 +54,13 @@ const TaskCard = ({ task }) => {
               <div className=" lg:tooltip" data-tip="Assets">
                 <MdAttachFile />
               </div>
-              <span>{task?.assets?.length}</span>
+              <span>{assets && assets?.length ? assets.length : 0}</span>
             </div>
             <div className="flex gap-1 items-center text-sm text-gray-600 ">
               <div className="lg:tooltip" data-tip="Team Member">
                 <HiOutlineUserGroup />
               </div>
-              <span>{task?.assets?.length}</span>
+              <span>{assignedUsers?.length}</span>
             </div>
           </div>
 

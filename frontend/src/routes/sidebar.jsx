@@ -1,6 +1,4 @@
-import Cog6ToothIcon from "@heroicons/react/24/outline/Cog6ToothIcon";
 import Squares2X2Icon from "@heroicons/react/24/outline/Squares2X2Icon";
-import UserIcon from "@heroicons/react/24/outline/UserIcon";
 import CheckCircleIcon from "@heroicons/react/24/solid/CheckCircleIcon";
 import ClockIcon from "@heroicons/react/24/solid/ClockIcon";
 import ListBulletIcon from "@heroicons/react/24/solid/ListBulletIcon";
@@ -35,18 +33,18 @@ const routes = [
     name: "To Do",
   },
 
-  {
-    path: "", //no url needed as this has submenu
-    icon: <Cog6ToothIcon className={`${iconClasses} inline`} />, // icon component
-    name: "Settings", // name that appear in Sidebar
-    submenu: [
-      {
-        path: "/app/profile-settings", //url
-        icon: <UserIcon className={submenuIconClasses} />, // icon component
-        name: "Profile", // name that appear in Sidebar
-      },
-    ],
-  },
+  // {
+  //   path: "", //no url needed as this has submenu
+  //   icon: <Cog6ToothIcon className={`${iconClasses} inline`} />, // icon component
+  //   name: "Settings", // name that appear in Sidebar
+  //   submenu: [
+  //     {
+  //       path: "/app/profile-settings", //url
+  //       icon: <UserIcon className={submenuIconClasses} />, // icon component
+  //       name: "Profile", // name that appear in Sidebar
+  //     },
+  //   ],
+  // },
 ];
 
 export default routes;
